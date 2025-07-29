@@ -1,7 +1,6 @@
 require("./config");
 const { init } = require("./core");
 
-const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
@@ -26,17 +25,11 @@ app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-app.use((req, res, next) => {
-    express.static(path.join(__dirname, "client", "dist"))(req, res, next);
-});
-
 app.all("/{*any}", (req, res) => {
     res.send(req.headers.host);
 });
 
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3000;
 
 (async () => {
     await init();
