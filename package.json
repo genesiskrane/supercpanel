@@ -1,0 +1,17 @@
+{
+  "name": "supercpanel",
+  "version": "1.0.0",
+  "description": "A Super CPanel",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "author": "Genesis Krane",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
+  }
+}
