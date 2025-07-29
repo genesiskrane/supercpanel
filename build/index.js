@@ -20,4 +20,4 @@ exec('npm install', (error, stdout, stderr) => {
 });
 
 
-console.log(process.env.NODE_ENV === 'production' ? 'Production Build' : 'Development Build');
+console.log(process.env.IN_CLOUD_BUILD === 'true' ? 'Production Build' : 'Development Build');

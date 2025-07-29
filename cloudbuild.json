@@ -6,7 +6,7 @@
                 "run",
                 "build"
             ],
-            "env":["NODE_ENV=true"]
+            "env":["IN_CLOUD_BUILD=true"]
         },
         {
             "name": "gcr.io/cloud-builders/gcloud",
