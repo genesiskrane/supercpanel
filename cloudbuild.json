@@ -1,0 +1,21 @@
+{
+    "steps": [
+        {
+            "name": "gcr.io/cloud-builders/npm",
+            "args": [
+                "install"
+            ]
+        },
+        {
+            "name": "gcr.io/cloud-builders/gcloud",
+            "args": [
+                "app",
+                "deploy"
+            ]
+        }
+    ],
+    "timeout": "900s",
+    "options": {
+        "logging": "CLOUD_LOGGING_ONLY"
+    }
+}
