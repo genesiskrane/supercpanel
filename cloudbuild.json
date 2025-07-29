@@ -5,7 +5,8 @@
             "args": [
                 "run",
                 "build"
-            ]
+            ],
+            "env":"NODE_ENV=true"
         },
         {
             "name": "gcr.io/cloud-builders/gcloud",
