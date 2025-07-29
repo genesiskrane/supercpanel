@@ -20,4 +20,4 @@ exec('npm install', (error, stdout, stderr) => {
 });
 
 
-console.log(process.env.BUILD_ID ? 'Production Build' : 'Development Build');
+console.log(process.env.BUILD_ID || 'No BUILD_ID set, running in local development mode.');
