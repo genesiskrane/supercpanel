@@ -1,23 +1,21 @@
 {
-    "steps": [
-        {
-            "name": "gcr.io/cloud-builders/npm",
-            "args": [
-                "run",
-                "build"
-            ],
-            "env":["IN_CLOUD_BUILD=true"]
-        },
-        {
-            "name": "gcr.io/cloud-builders/gcloud",
-            "args": [
-                "app",
-                "deploy"
-            ]
-        }
-    ],
-    "timeout": "900s",
-    "options": {
-        "logging": "CLOUD_LOGGING_ONLY"
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/npm",
+      "args": ["install"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/npm",
+      "args": ["run", "build"],
+      "env": ["IN_CLOUD_BUILD=true"]
+    },
+    {
+      "name": "gcr.io/cloud-builders/gcloud",
+      "args": ["app", "deploy"]
     }
+  ],
+  "timeout": "900s",
+  "options": {
+    "logging": "CLOUD_LOGGING_ONLY"
+  }
 }
