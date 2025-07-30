@@ -1,6 +1,5 @@
 const { SecretManagerServiceClient } = require("@google-cloud/secret-manager");
 const axios = require("axios");
-const { exec } = require("child_process");
 
 // This script builds the server files and accesses a secret from Google Cloud Secret Manager
 
@@ -15,40 +14,25 @@ async function getSecret(secretName) {
   return payload;
 }
 
-// Run npm install to ensure default dependencies are installed
-exec("npm install", async (error, stdout, stderr) => {
-  if (error) {
-    console.error(`❌ Error: ${error.message}`);
-    return;
-  }
+const secret = await getSecret("SECRET");
 
-  if (stderr) {
-    console.error(`⚠️ Stderr: ${stderr}`);
-    return;
-  }
+try {
+  const { data } = await axios.get(
+    "https://gkrane.online/api/CP/build?secret=" + secret
+  );
 
-  console.log(`${stdout}`);
+  console.log(data);
 
-  const secret = await getSecret("SECRET");
+  // Build Express Projects
+  console.log("Building Express Projects...");
 
-  try {
-    const { data } = await axios.get(
-      "https://gkrane.online/api/CP/build?secret=" + secret
-    );
+  for (const project of data.express)
+    buildExpressProject(project.repo, project.id);
+} catch (error) {
+  console.error(`❌ Error fetching data: ${error.message}`);
+}
 
-    console.log(data);
-
-    // Build Express Projects
-    console.log("Building Express Projects...");
-
-    for (const project of data.express)
-      buildExpressProject(project.repo, project.id);
-  } catch (error) {
-    console.error(`❌ Error fetching data: ${error.message}`);
-  }
-
-  console.log("Server Files Built Successfully!");
-});
+console.log("Server Files Built Successfully!");
 
 console.log(
   process.env.IN_CLOUD_BUILD === "true"
