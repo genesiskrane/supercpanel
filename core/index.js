@@ -1,11 +1,5 @@
-const init = () => {
+console.log("Config loaded successfully");
 
-	
-
-
-
-
-	console.log("Initialized");
-};
+const init = () => { }
 
 module.exports = { init };
