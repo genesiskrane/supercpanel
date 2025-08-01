@@ -28,12 +28,5 @@ app.all("/{*any}", (req, res) => {
   res.send(req.headers.host);
 });
 
-const PORT = process.env.PORT || 3000;
 
-(async () => {
-  await init();
-
-  app.listen(PORT, () => {
-    console.log("🚀 Super Express App listening on port 3000");
-  });
-})();
+init(app);
