@@ -1,15 +1,1 @@
-runtime: nodejs
-env: flex
-
-runtime_config:
-  operating_system: "ubuntu24"
-  runtime_version: "24"
-
-resources:
-  cpu: 1
-  memory_gb: 1
-  disk_size_gb: 10
-
-# Optional: environment vars
-env_variables:
-  NODE_ENV: "production"
+runtime: nodejs24

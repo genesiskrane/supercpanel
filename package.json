@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
+    "build": "node ./cmd/build.js",
     "reset": "node ./cmd/reset.js"
   },
   "author": "Genesis Krane",
@@ -18,8 +19,5 @@
     "express": "^5.1.0",
     "mongoose": "^8.16.5",
     "morgan": "^1.10.1"
-  },
-  "engines": {
-    "node": "24.x"
   }
 }
