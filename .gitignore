@@ -3,3 +3,5 @@
 /logs
 /stack
 data.json
+/tmp
+.env

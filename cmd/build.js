@@ -51,6 +51,7 @@ async function main() {
   );
 
   const secret = await getSecret("SECRET");
+  console.info(`Using secret: ${secret}`);
   console.log("Starting build process...");
   try {
     const { data } = await axios.get(
