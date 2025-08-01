@@ -1,14 +1,15 @@
 runtime: nodejs
 env: flex
-resources:
-  cpu: 1
-  memory_gb: 1
-  disk_size_gb: 10
 
 runtime_config:
   operating_system: "ubuntu24"
   runtime_version: "24"
 
+resources:
+  cpu: 1
+  memory_gb: 1
+  disk_size_gb: 10
+
+# Optional: environment vars
 env_variables:
-  NODE_ENV: production
-  # other tenant-specific vars can be injected here or via secrets proxy
+  NODE_ENV: "production"
