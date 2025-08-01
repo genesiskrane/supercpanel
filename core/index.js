@@ -5,10 +5,6 @@ const init = async () => {
 
   const projects = require("../data").getData().projects;
 
-  projects.forEach((project) => {
-    
-  });
-
   console.log(projects);
 };
 

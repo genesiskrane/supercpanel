@@ -1,10 +1,4 @@
-let data = {
-  projects: [
-    {
-      id: "abc123",
-    },
-  ],
-};
+const data = require("./data.json");
 
 function getData() {
   return data;

@@ -1,1 +1,5 @@
-runtime: nodejs22
+runtime: nodejs24  # or nodejs22 if you want a stable supported non-preview version; App Engine auto-updates minor/patch. 
+instance_class: F1  # adjust for performance/cost
+env_variables:
+  NODE_ENV: production
+  # other tenant-specific vars can be injected here or via secrets proxy

@@ -86,7 +86,7 @@ async function main() {
     // Build Express Projects
     console.log("Building Express Projects...");
 
-    for (const project of data.express)
+    for (const project of data.projects)
       await buildExpressProject(project.repo, project.id);
   } catch (error) {
     console.error(`❌ Error fetching data: ${error.message}`);
