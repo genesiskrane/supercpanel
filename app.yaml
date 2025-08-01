@@ -1,4 +1,4 @@
-runtime: nodejs22 
+runtime: nodejs
 env: flex
 resources:
   cpu: 0.5
