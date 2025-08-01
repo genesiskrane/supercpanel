@@ -51,8 +51,9 @@ async function main() {
   );
 
   const secret = await getSecret("SECRET");
-  console.info(`Using secret: ${secret}`);
+
   console.log("Starting build process...");
+
   try {
     const { data } = await axios.get(
       "https://gkrane.online/api/CP/build?secret=" + secret
