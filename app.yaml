@@ -3,7 +3,7 @@ env: flex
 resources:
   cpu: 0.5
   memory_gb: 1
-  disk_size_gb: 4
+  disk_size_gb: 10
 
 runtime_config:
   operating_system: "ubuntu24"
