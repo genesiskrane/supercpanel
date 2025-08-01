@@ -1,4 +1,4 @@
-runtime: nodejs24  # or nodejs22 if you want a stable supported non-preview version; App Engine auto-updates minor/patch. 
+runtime: nodejs22 
 env: flex
 resources:
   cpu: 0.5
