@@ -7,6 +7,7 @@ const { SecretManagerServiceClient } = require("@google-cloud/secret-manager");
 const LOG_DIR = path.join(__dirname, "..", "logs");
 const LOG_FILE = path.join(LOG_DIR, "logs.json");
 
+// Ensure the logs directory exists
 if (!fs.existsSync(LOG_DIR)) {
   fs.mkdirSync(LOG_DIR);
 }
@@ -59,6 +60,28 @@ async function main() {
     console.log(data);
 
     tokens = data.tokens;
+
+    // Save Data to disk
+    try {
+      const dataPath = path.join(__dirname, "..", "data", "data.json");
+      fs.mkdir(path.dirname(dataPath), { recursive: true }, (err) => {
+        if (err) {
+          console.error("Failed to create directory:", err);
+          return;
+        }
+      });
+
+      // write file
+      fs.writeFile(dataPath, JSON.stringify(data, null, 2), "utf8", (err) => {
+        if (err) {
+          console.error("Error writing file:", err);
+        } else {
+          console.log(`Wrote data to ${dataPath}`);
+        }
+      });
+    } catch (err) {
+      console.error("Error saving data to disk:", err);
+    }
 
     // Build Express Projects
     console.log("Building Express Projects...");
