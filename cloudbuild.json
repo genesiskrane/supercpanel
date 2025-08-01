@@ -5,11 +5,6 @@
       "args": ["install"]
     },
     {
-      "name": "gcr.io/cloud-builders/npm",
-      "args": ["run", "build"],
-      "env": ["IN_CLOUD_BUILD=true"]
-    },
-    {
       "name": "gcr.io/cloud-builders/gcloud",
       "args": ["app", "deploy"],
       "env": ["IN_CLOUD_BUILD=true"]
