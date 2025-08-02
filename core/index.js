@@ -1,4 +1,3 @@
-const path = require("path");
 const axios = require("axios");
 const AdmZip = require("adm-zip");
 const { Storage } = require("@google-cloud/storage");
@@ -21,8 +20,6 @@ async function buildClientsToGoogleCloudStorage() {
 }
 
 async function checkDownloadAndUploadRepoRelease(gitURL, subname, id) {
-  console.log(`\n🔎 Checking release from ${gitURL}/releases/latest`);
-
   const splits = gitURL.split("/");
   const owner = splits[3];
   const repo = splits[4];
@@ -42,10 +39,9 @@ async function checkDownloadAndUploadRepoRelease(gitURL, subname, id) {
     const timestamp = timestampRaw.split(".")[0];
 
     const currentVersionDataFileURL = `https://storage.googleapis.com/${bucketName}/${id[0]}/${id}/${subname}/dist/info.json`;
-    const currentClientInfo = await getCurrentClientStorageInfo(currentVersionDataFileURL);
-
-    console.log("📦 Current GCS version:", currentClientInfo);
-    console.log("🆕 Latest GitHub version:", { commit, timestamp });
+    const currentClientInfo = await getCurrentClientStorageInfo(
+      currentVersionDataFileURL
+    );
 
     const needsUpdate =
       currentClientInfo.commit &&
@@ -53,10 +49,7 @@ async function checkDownloadAndUploadRepoRelease(gitURL, subname, id) {
       (currentClientInfo.commit !== commit ||
         currentClientInfo.timestamp !== timestamp);
 
-    if (!needsUpdate) {
-      console.log(`✅ No update needed for ${subname} in project ${id}.`);
-      return;
-    }
+    if (!needsUpdate) return;
 
     await extractFileToCloudStorage(zipURL, subname, id, commit, timestamp);
   } catch (error) {
@@ -67,13 +60,21 @@ async function checkDownloadAndUploadRepoRelease(gitURL, subname, id) {
   }
 }
 
-async function extractFileToCloudStorage(zipURL, subname, id, commit, timestamp) {
+async function extractFileToCloudStorage(
+  zipURL,
+  subname,
+  id,
+  commit,
+  timestamp
+) {
   const bucket = storage.bucket(bucketName);
 
   console.log(`📥 Downloading zip file from ${zipURL}...`);
 
   try {
-    const zipResponse = await axios.get(zipURL, { responseType: "arraybuffer" });
+    const zipResponse = await axios.get(zipURL, {
+      responseType: "arraybuffer",
+    });
     const zip = new AdmZip(zipResponse.data);
     const zipEntries = zip.getEntries();
 
@@ -125,17 +126,13 @@ async function getCurrentClientStorageInfo(infoURL) {
 }
 
 const init = async (app) => {
-  console.log("🧠 Initializing Super Cpanel...");
+  console.log("Initializing Super Cpanel...");
 
   app.listen(process.env.PORT || 3000, async () => {
     console.log("🚀 Super Express App listening on port 3000");
-
-    console.log(`📊 Loaded ${projects.length} projects`);
-    console.info(`📡 Syncing project clients to Google Cloud Storage...`);
-
+    console.log(`Loaded ${projects.length} projects`);
     await buildClientsToGoogleCloudStorage();
-
-    console.log("🏁 Super Cpanel initialization complete.");
+    console.log("Super Cpanel initialization complete.");
   });
 };
 
