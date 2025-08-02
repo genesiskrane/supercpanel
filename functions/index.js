@@ -1,9 +1,10 @@
 const { projects } = require("../data").getData();
 
 function getProjectIDByHostname(hostname) {
-  console.log(projects, hostname);
-
-  return "bawell";
+  return (
+    projects.find((project) => project.domains.includes(hostname)).id ||
+    "CPanel"
+  );
 }
 
 module.exports = { getProjectIDByHostname };

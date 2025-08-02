@@ -8,6 +8,8 @@ const path = require("path");
 
 const mime = require("mime-types");
 
+const fn = require("./functions");
+
 const { Storage } = require("@google-cloud/storage");
 
 const router = require("./router");
@@ -42,7 +44,7 @@ const bucket = new Storage().bucket("supercpanel");
  */
 function identifyProjectFile(hostname, reqPath) {
   // Example: parse subdomain as projectID; fallback to "CPanel"
-  let projectID = "CPanel";
+  let projectID = fn.getProjectIDByHostname(hostname);
   if (hostname) {
     const parts = hostname.split(".");
     if (parts.length >= 3) {
@@ -77,7 +79,6 @@ function getFile(projectID, theme, filePath) {
 
 // Attach existing routers first
 app.use(router);
-
 
 // Catch-all for file serving / SPA shell
 app.all("/{*any}", async (req, res) => {
