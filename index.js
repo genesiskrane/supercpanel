@@ -16,8 +16,16 @@ const router = require("./router");
 
 const app = express();
 
+const allowedHosts = require("./data").getAllowedHosts();
+
 // HTTPS Redirect (only in production, and avoid infinite redirect loops)
 app.use((req, res, next) => {
+
+    if (!allowedHosts.includes(hostHeader)) {
+    console.warn(`Blocked request from host: ${hostHeader}`);
+    return res.status(403).send('Forbidden');
+  }
+
   if (
     process.env.NODE_ENV === "production" &&
     req.headers["x-forwarded-proto"] &&

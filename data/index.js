@@ -4,4 +4,15 @@ function getData() {
   return data;
 }
 
-module.exports = { getData };
+function getAllowedHosts() {
+  let allowedHosts = [];
+
+  data.projects.forEach((project) => {
+    allowedHosts.push(...project.domains);
+  });
+
+  console.log(allowedHosts);
+  
+  return allowedHosts;
+}
+module.exports = { getData, getAllowedHosts };
