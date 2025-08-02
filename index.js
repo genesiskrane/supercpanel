@@ -39,26 +39,20 @@ app.use(express.urlencoded({ extended: true }));
 const bucket = new Storage().bucket("supercpanel");
 
 /**
- * Determines project/theme/file based on hostname and request path.
+ * Determines project/subname/file based on hostname and request path.
  * Simplified stub; adapt logic to your domain conventions.
  */
 function identifyProjectFile(hostname, reqPath) {
   // Example: parse subdomain as projectID; fallback to "CPanel"
   let projectID = fn.getProjectIDByHostname(hostname);
-  if (hostname) {
-    const parts = hostname.split(".");
-    if (parts.length >= 3) {
-      projectID = parts[0]; // e.g., project.example.com
-    }
-  }
 
-  // Default theme
-  const theme = "default";
+  // Default subname
+  const subname = "default";
 
   // Normalize and decode the path
   let cleaned = decodeURIComponent(reqPath);
   if (cleaned === "/" || cleaned === "") {
-    return { projectID, theme, filePath: "index.html" };
+    return { projectID, subname, filePath: "index.html" };
   }
 
   // Remove leading slash
@@ -66,15 +60,16 @@ function identifyProjectFile(hostname, reqPath) {
 
   // If path appears to be a file (has extension), use it; else fallback to index.html
   const hasExt = path.extname(cleaned) !== "";
-  const filePath = hasExt ? cleaned : "index.html";
 
-  return { projectID, theme, filePath };
+  const filePath = hasExt ? cleaned : path.join("index.html");
+
+  return { projectID, subname, filePath };
 }
 
-function getFile(projectID, theme, filePath) {
+function getFile(projectID, subname, filePath) {
   // organize by first letter to shard if desired
   const prefix = projectID[0];
-  return bucket.file(`${prefix}/${projectID}/${theme}/dist/${filePath}`);
+  return bucket.file(`${prefix}/${projectID}/${subname}/dist/${filePath}`);
 }
 
 // Attach existing routers first
@@ -82,12 +77,12 @@ app.use(router);
 
 // Catch-all for file serving / SPA shell
 app.all("/{*any}", async (req, res) => {
-  const { projectID, theme, filePath } = identifyProjectFile(
+  const { projectID, subname, filePath } = identifyProjectFile(
     req.headers.host,
     req.path
   );
 
-  const file = getFile(projectID, theme, filePath);
+  const file = getFile(projectID, subname, filePath);
   const [exists] = await file.exists();
   if (!exists) return res.status(404).send("File not found");
 
