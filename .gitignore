@@ -4,4 +4,6 @@
 /stack
 data.json
 /tmp
+/cmd
+README.md
 .env
