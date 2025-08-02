@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const express = require("express");
 const path = require("path");
 
+const mime = require("mime-types");
+
 const { Storage } = require("@google-cloud/storage");
 
 const router = require("./router");
@@ -76,6 +78,7 @@ function getFile(projectID, theme, filePath) {
 // Attach existing routers first
 app.use(router);
 
+
 // Catch-all for file serving / SPA shell
 app.all("/{*any}", async (req, res) => {
   const { projectID, theme, filePath } = identifyProjectFile(
@@ -84,49 +87,15 @@ app.all("/{*any}", async (req, res) => {
   );
 
   const file = getFile(projectID, theme, filePath);
-  const stream = file.createReadStream();
+  const [exists] = await file.exists();
+  if (!exists) return res.status(404).send("File not found");
 
-  stream.on("error", (err) => {
-    console.error(
-      `Error fetching "${filePath}" for project="${projectID}" theme="${theme}":`,
-      err
-    );
-    if (err.code === 404 || err.code === 404 /* sometimes string */) {
-      // If requested path was a non-file (e.g., /some/route) and we already tried index.html,
-      // you could optionally send a 404 here or again attempt index.html. current logic:
-      if (filePath !== "index.html") {
-        // fallback to index.html once
-        const fallback = getFile(projectID, theme, "index.html");
-        const fbStream = fallback.createReadStream();
-        fbStream.on("error", (fbErr) => {
-          console.error("Fallback index.html failed:", fbErr);
-          res.status(404).send("Not Found");
-        });
-        fbStream.on("response", (gcsRes) => {
-          const contentType = gcsRes.headers && gcsRes.headers["content-type"];
-          if (contentType) res.setHeader("Content-Type", contentType);
-        });
-        fbStream.pipe(res);
-      } else {
-        res.status(404).send("Not Found");
-      }
-    } else {
-      res.status(502).send("Failed to load application shell");
-    }
-  });
+  const contentType = mime.lookup(file.name) || "application/octet-stream";
 
-  stream.on("response", (gcsRes) => {
-    const contentType = gcsRes.headers && gcsRes.headers["content-type"];
-    if (contentType) {
-      res.setHeader("Content-Type", contentType);
-    }
-    // Optionally propagate cache control if set in GCS
-    if (gcsRes.headers && gcsRes.headers["cache-control"]) {
-      res.setHeader("Cache-Control", gcsRes.headers["cache-control"]);
-    }
-  });
+  res.set("Cache-Control", "public, max-age=36000, immutable");
 
-  stream.pipe(res);
+  const [buffer] = await file.download();
+  res.type(contentType).send(buffer);
 });
 
 init(app);
