@@ -113,7 +113,6 @@ async function buildExpressProject(repo_url, id) {
 
   try {
     const files = await getFilesRecursive(url, TOKEN);
-    console.log(`✅ Found ${files.length} files for ${repo_url}`, id);
 
     for (const file of files) {
       writeFileToDisk(file, TOKEN, id);
@@ -225,7 +224,6 @@ function parseFileContent(content, filePath, id) {
       const filename = parts[parts.length - 1]; // get the last part (e.g., index.js)
       const newRef = `${upPath}/${filename}/stack/${id[0]}/${id}`;
 
-      console.log(ref, newRef, filePath);
       return `require(${quote}${newRef}${quote})`;
     }
     return match;
