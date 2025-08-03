@@ -50,28 +50,32 @@ const bucket = new Storage().bucket("supercpanel");
  * Simplified stub; adapt logic to your domain conventions.
  */
 function identifyProjectFile(hostname, reqPath) {
-  // Example: parse subdomain as projectID; fallback to "CPanel"
   let projectID = fn.getProjectIDByHostname(hostname);
+
+  // Normalize and decode the path
+  let cleaned = decodeURIComponent(reqPath);
+
+  // Special case: route all "/cpanel" requests to the CPanel project
+  if (cleaned.startsWith("/cpanel")) {
+    projectID = "CPanel";
+
+    // Serve "/cpanel" as if it's the root of the CPanel project
+    cleaned = cleaned.replace(/^\/cpanel\/?/, "");
+
+    // Handle edge case if the path was exactly "/cpanel"
+    if (!cleaned || cleaned === "") cleaned = "index.html";
+  }
 
   // Default subname
   const subname = "default";
 
-  // Normalize and decode the path
-  let cleaned = decodeURIComponent(reqPath);
-  if (cleaned === "/" || cleaned === "") {
-    return { projectID, subname, filePath: "index.html" };
-  }
-
-  // Remove leading slash
-  if (cleaned.startsWith("/")) cleaned = cleaned.slice(1);
-
   // If path appears to be a file (has extension), use it; else fallback to index.html
   const hasExt = path.extname(cleaned) !== "";
-
   const filePath = hasExt ? cleaned : path.join("index.html");
 
   return { projectID, subname, filePath };
 }
+
 
 function getFile(projectID, subname, filePath) {
   // organize by first letter to shard if desired
