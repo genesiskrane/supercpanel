@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express");
 
+const APIRouter = require("./api")
+
 const { projects } = require("../data").getData();
 
 const router = express.Router();
@@ -44,5 +46,7 @@ router.use((req, res, next) => {
     return next();
   }
 });
+
+router.use("/api", APIRouter);
 
 module.exports = router;
