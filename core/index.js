@@ -1,3 +1,4 @@
+const path = require("path");
 const axios = require("axios");
 const AdmZip = require("adm-zip");
 const { Storage } = require("@google-cloud/storage");
@@ -44,10 +45,10 @@ async function checkDownloadAndUploadRepoRelease(gitURL, subname, id) {
     );
 
     const needsUpdate =
-      currentClientInfo.commit &&
-      currentClientInfo.timestamp &&
-      (currentClientInfo.commit !== commit ||
-        currentClientInfo.timestamp !== timestamp);
+      !currentClientInfo.commit ||
+      !currentClientInfo.timestamp ||
+      currentClientInfo.commit !== commit ||
+      currentClientInfo.timestamp !== timestamp;
 
     if (!needsUpdate) return;
 
@@ -126,13 +127,17 @@ async function getCurrentClientStorageInfo(infoURL) {
 }
 
 const init = async (app) => {
-  console.log("Initializing Super Cpanel...");
+  console.log("🧠 Initializing Super Cpanel...");
 
   app.listen(process.env.PORT || 3000, async () => {
     console.log("🚀 Super Express App listening on port 3000");
-    console.log(`Loaded ${projects.length} projects`);
+
+    console.log(`📊 Loaded ${projects.length} projects`);
+    console.info(`📡 Syncing project clients to Google Cloud Storage...`);
+
     await buildClientsToGoogleCloudStorage();
-    console.log("Super Cpanel initialization complete.");
+
+    console.log("🏁 Super Cpanel initialization complete.");
   });
 };
 
