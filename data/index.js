@@ -5,14 +5,14 @@ function getData() {
 }
 
 function getAllowedHosts() {
-  let allowedHosts = [];
+  let allowedHosts = ['supercpanel.nw.r.appspot.com'];
 
   data.projects.forEach((project) => {
     allowedHosts.push(...project.domains);
   });
 
   console.log(allowedHosts);
-  
+
   return allowedHosts;
 }
 module.exports = { getData, getAllowedHosts };

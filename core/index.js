@@ -1,4 +1,3 @@
-const path = require("path");
 const axios = require("axios");
 const AdmZip = require("adm-zip");
 const { Storage } = require("@google-cloud/storage");
