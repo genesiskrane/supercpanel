@@ -77,9 +77,7 @@ async function main() {
       fs.writeFile(dataPath, JSON.stringify(data, null, 2), "utf8", (err) => {
         if (err) {
           console.error("Error writing file:", err);
-        } else {
-          console.log(`Wrote data to ${dataPath}`);
-        }
+        } else 1; //console.log(`Wrote data to ${dataPath}`);
       });
     } catch (err) {
       console.error("Error saving data to disk:", err);
@@ -192,7 +190,7 @@ async function writeFileToDisk(file, token, id) {
     const dir = path.dirname(modifiedPath);
 
     fs.mkdirSync(dir, { recursive: true });
-    console.log(`📁 Created directory: ${dir}`, id);
+    // console.log(`📁 Created directory: ${dir}`, id);
 
     const { data: fileContent } = await axios.get(file.url, {
       headers: {
@@ -203,11 +201,35 @@ async function writeFileToDisk(file, token, id) {
       responseType: "arraybuffer",
     });
 
-    fs.writeFileSync(modifiedPath, fileContent);
-    console.log(`📝 Wrote file: ${parts.join("/")}`, id);
+    fs.writeFileSync(
+      modifiedPath,
+      parseFileContent(fileContent, file.path, id),
+      "utf8"
+    );
+    // console.log(`📝 Wrote file: ${parts.join("/")}`, id);
   } catch (error) {
     console.error(`❌ Failed to write ${file.path}: ${error.message}`, id);
   }
+}
+
+function parseFileContent(content, filePath, id) {
+  content = content.toString("utf8");
+
+  return content.replace(/require\((['"`])(.*?)\1\)/g, (match, quote, ref) => {
+    if (ref.startsWith("..")) {
+      const parts = ref.split("/");
+      const count = parts.filter((part) => part === "..").length + 3;
+
+      const upPath = "../".repeat(count).replace(/\/$/, ""); // remove trailing slash
+
+      const filename = parts[parts.length - 1]; // get the last part (e.g., index.js)
+      const newRef = `${upPath}/${filename}/stack/${id[0]}/${id}`;
+
+      console.log(ref, newRef, filePath);
+      return `require(${quote}${newRef}${quote})`;
+    }
+    return match;
+  });
 }
 
 main()

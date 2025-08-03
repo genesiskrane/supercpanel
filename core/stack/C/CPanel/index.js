@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../../../config/stack/C/CPanel');
 
 const init = () => {
 	// Initialize database connection

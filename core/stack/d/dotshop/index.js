@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../../../config/stack/d/dotshop');
 
 const init = () => {
 	// Initialize database connection

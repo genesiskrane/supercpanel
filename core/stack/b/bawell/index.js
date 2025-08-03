@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../../../config/stack/b/bawell');
 
 const init = () => {
 	// Initialize database connection
