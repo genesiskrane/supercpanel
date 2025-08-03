@@ -1,9 +1,8 @@
 /node_modules
-/dist
-/logs
-/stack
+**/dist/
+**/logs/
+**/stack/
 data.json
 /tmp
-/cmd
 README.md
 .env
