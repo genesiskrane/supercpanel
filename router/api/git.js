@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/commit", (req, res) => {
+router.post("/commit", (req, res) => {
   res.send("Commit endpoint is under construction");
 });
 
