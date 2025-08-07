@@ -79,10 +79,6 @@ function identifyProjectFile(hostname, reqPath) {
 function getFile(projectID, subname, filePath) {
   // organize by first letter to shard if desired
   const prefix = projectID[0];
-  console.log(
-    "FILE PATH:",
-    `${prefix}/${projectID}/${subname}/dist/${filePath}`
-  );
   return bucket.file(path.join(prefix, projectID, subname, "dist", filePath));
 }
 

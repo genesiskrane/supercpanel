@@ -1,11 +1,8 @@
 const express = require("express");
 
 const router = express.Router();
+const controller = require("../../controller");
 
-router.post("/commit", (req, res) => {
-  console.log(req.body);
-  res.send("Commit endpoint is under construction");
-});
-
+router.post("/commit", controller.git.updateDistAfterCommit);
 
 module.exports = router;
