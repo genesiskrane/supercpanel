@@ -39,7 +39,7 @@ app.set("trust proxy", true);
 
 // Middlewares
 app.use(cors());
-app.use(morgan('common'));
+app.use(morgan("common"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -76,7 +76,6 @@ function identifyProjectFile(hostname, reqPath) {
   return { projectID, subname, filePath };
 }
 
-
 function getFile(projectID, subname, filePath) {
   // organize by first letter to shard if desired
   const prefix = projectID[0];
@@ -98,8 +97,6 @@ app.all("/{*any}", async (req, res) => {
   if (!exists) return res.status(404).send("File not found");
 
   const contentType = mime.lookup(file.name) || "application/octet-stream";
-
-  res.set("Cache-Control", "public, max-age=36000, immutable");
 
   const [buffer] = await file.download();
   res.type(contentType).send(buffer);

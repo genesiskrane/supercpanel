@@ -12,4 +12,11 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/data/domain", (req, res) => {
+  res.json({
+    text: "Domain data endpoint is under construction",
+    domain: req.headers.host,
+  });
+});
+
 module.exports = router;
