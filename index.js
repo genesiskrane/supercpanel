@@ -81,9 +81,9 @@ function getFile(projectID, subname, filePath) {
   const prefix = projectID[0];
   console.log(
     "FILE PATH:",
-    `${prefix}/${projectID}/${subname}/dist${filePath}`
+    `${prefix}/${projectID}/${subname}/dist/${filePath}`
   );
-  return bucket.file(`${prefix}/${projectID}/${subname}/dist${filePath}`);
+  return bucket.file(path.join(prefix, projectID, subname, "dist", filePath));
 }
 
 // Attach existing routers first
