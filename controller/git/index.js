@@ -18,7 +18,7 @@ const updateDistAfterCommit = (req, res) => {
     return null;
   }
 
-  const { project, subname } = findProjectByClientGitURL();
+  const { project, subname } = findProjectByClientGitURL(gitURL);
 
   fn.uploadRepoDist(gitURL, project.id, subname);
 
