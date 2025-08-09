@@ -13,9 +13,15 @@ router.get("/", (req, res) => {
 });
 
 router.get("/data/domain", (req, res) => {
+  const domain = req.headers.host;
+
+  if (req.headers.host !== "localhost:3000")
+    return res.json({
+      id: "default",
+    });
+
   res.json({
-    text: "Domain data endpoint is under construction",
-    domain: req.headers.host,
+    id: "default",
   });
 });
 
