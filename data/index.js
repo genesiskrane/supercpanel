@@ -5,7 +5,11 @@ function getData() {
 }
 
 function getAllowedHosts() {
-  let allowedHosts = ["supercpanel.nw.r.appspot.com", "localhost:3000"];
+  let allowedHosts = [
+    "supercpanel.nw.r.appspot.com",
+    "localhost:3000",
+    "localhost",
+  ];
 
   data.projects.forEach((project) => {
     allowedHosts.push(...project.domains);

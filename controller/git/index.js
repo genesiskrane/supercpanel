@@ -20,7 +20,7 @@ const updateDistAfterCommit = (req, res) => {
 
   const { project, subname } = findProjectByClientGitURL(gitURL);
 
-  fn.uploadRepoDist(gitURL, project.id, subname);
+  fn.uploadRepoDist(gitURL, subname, project.id);
 
   res.send("Building Public Dist for Client");
 };
